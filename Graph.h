@@ -4,10 +4,15 @@
 #include <iostream>
 
 #include "MyList.h"
+#include "Utils.h"
+
+#define LEFT 0
+#define RIGHT 1
+#define UNSORTED -1
 
 class Graph {
 public:
-    Graph(int size);
+    explicit Graph(int size);
 
     void addEdge(int source, int destination);
 
@@ -20,10 +25,14 @@ public:
     ~Graph();
 
 private:
-    void sortDegrees(int* copy);
     void degreeSequence();
     void dfs(int vertex, int* isVisited);
     int countComponents();
+    int isComponentBipartite(int vertex, int* isVisited, int* flags);
+    int isBipartite();
+
+    int countC4();
+    int complementEdges();
 
     MyList* adjacencyList;
     int* degrees;

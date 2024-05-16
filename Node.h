@@ -4,7 +4,7 @@
 
 class Node {
 public:
-    Node(int value);
+    explicit Node(int value);
 
     int getValue() const;
 

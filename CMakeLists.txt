@@ -9,4 +9,6 @@ add_executable(Graphs main.cpp
         Node.cpp
         Node.h
         Graph.cpp
-        Graph.h)
+        Graph.h
+        Utils.cpp
+        Utils.h)
