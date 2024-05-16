@@ -11,4 +11,6 @@ add_executable(Graphs main.cpp
         Graph.cpp
         Graph.h
         Utils.cpp
-        Utils.h)
+        Utils.h
+        MyVector.cpp
+        MyVector.h)
