@@ -39,16 +39,6 @@ Node* MyList::getTopElement() const {
     return this->head;
 }
 
-void MyList::printList(){
-    std::cout << this->getSize() << " ";
-    Node* temp = this->head;
-    while(temp != nullptr){
-        std::cout << temp->getValue() << " ";
-        temp = temp->next;
-    }
-    std::cout << std::endl;
-}
-
 MyList::~MyList(){
     while(this->head != nullptr)
         deleteNode();

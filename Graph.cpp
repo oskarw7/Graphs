@@ -16,21 +16,15 @@ void Graph::setDegree(int vertex, int degree){
 
 void Graph::printProperties() {
     degreeSequence();
-    std::cout << countComponents() << std::endl;
-    (isBipartite()) ? std::cout << "T" << std::endl : std::cout << "F" << std::endl;
-    std::cout << "?" << std::endl;
-    std::cout << "?" << std::endl;
-    std::cout << "?" << std::endl;
-    std::cout << "?" << std::endl;
-    std::cout << "?" << std::endl;
-    std::cout << countC4() << std::endl;
-    std::cout << complementEdges() << std::endl;
-}
-
-void Graph::printGraph(){
-    std::cout << this->size << std::endl;
-    for(int i = 0; i < this->size; i++)
-        this->adjacencyList[i].printList();
+    printf("%d\n", countComponents());
+    (isBipartite()) ? printf("T\n") : printf("F\n");
+    printf("?\n");
+    printf("?\n");
+    printf("?\n");
+    printf("?\n");
+    printf("?\n");
+    printf("?\n");
+    printf("%d\n", complementEdges());
 }
 
 Graph::~Graph(){
@@ -137,38 +131,40 @@ int Graph::countC4() {
     int count = 0;
     const int maxDepth = 4;
     MyList* stack = new MyList();
-    for (int i = 0; i < this->size; i++) {
-        int depth = 0, previousVertex = -1;
+    MyList* depthStack = new MyList();
+    for (int i=0; i<this->size; i++) {
         stack->addNode(i+1);
+        depthStack->addNode(0);
         while (stack->getTopElement() != nullptr) {
+            int parentVertex = stack->getTopElement()->getPrevious();
             int currentVertex = stack->deleteNode();
-            if (currentVertex != previousVertex) {
-                previousVertex = currentVertex;
-                depth++;
-                for (int j=0; j<this->degrees[currentVertex-1]; j++) {
+            int currentDepth = depthStack->deleteNode();
+            if(currentVertex==i+1 && currentDepth==maxDepth)
+                count++;
+            else if(currentDepth<maxDepth){
+                for(int j=0; j<this->degrees[currentVertex-1]; j++){
                     int adjacentVertex = this->adjacencyList[currentVertex-1].getNodeValue(j);
-                    if (adjacentVertex == i+1 && depth == maxDepth)
-                        count++;
-                    else if (depth < maxDepth)
+                    if(adjacentVertex!=parentVertex){
                         stack->addNode(adjacentVertex);
-
+                        stack->getTopElement()->setPrevious(currentVertex);
+                        depthStack->addNode(currentDepth+1);
+                    }
                 }
             }
         }
-        while (stack->getTopElement() != nullptr)
-            stack->deleteNode();
     }
+    delete depthStack;
     delete stack;
 
     return count/8;
 }
 
 int Graph::complementEdges(){
-    int completeEdges = this->size*(this->size-1)/2;
+    int completeEdges = (this->size)*(this->size-1)/2;
     int currentEdges = 0;
     for(int i=0; i<this->size; i++)
         currentEdges += this->degrees[i];
     currentEdges /= 2;
 
-    return completeEdges - currentEdges;
+    return completeEdges-currentEdges;
 }

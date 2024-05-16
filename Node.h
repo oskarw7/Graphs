@@ -8,12 +8,16 @@ public:
 
     int getValue() const;
 
+    int getPrevious() const;
+
+    void setPrevious(int vertex);
+
     friend class MyList;
 
 private:
     int value;
+    int parentValue;
     Node* next;
-
 };
 
 

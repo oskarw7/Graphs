@@ -19,8 +19,6 @@ public:
 
     Node* getTopElement() const;
 
-    void printList();
-
     ~MyList();
 
     friend class Graph;

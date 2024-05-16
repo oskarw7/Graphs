@@ -1,7 +1,7 @@
 #ifndef GRAPH_H
 #define GRAPH_H
 
-#include <iostream>
+#include <stdio.h>
 
 #include "MyList.h"
 #include "Utils.h"
@@ -19,8 +19,6 @@ public:
     void setDegree(int vertex, int degree);
 
     void printProperties();
-
-    void printGraph();
 
     ~Graph();
 
