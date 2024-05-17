@@ -20,8 +20,8 @@ void Graph::printProperties() {
     (isBipartite()) ? printf("T\n") : printf("F\n");
     printf("?\n");
     printf("?\n");
-    printf("?\n");
-    printf("?\n");
+    greedyColoring();
+    LFColoring();
     printf("?\n");
     printf("?\n");
     printf("%d\n", complementEdges());
@@ -45,22 +45,19 @@ void Graph::degreeSequence(){
 }
 
 void Graph::dfs(int vertex, int* isVisited){
-    //MyList* stack = new MyList();
-    MyStack* stack = new MyStack();
-    stack->addNode(vertex);
-    while(stack->getTopElement() >= 0){
-        int currentVertex = stack->deleteNode();
+    MyStack stack;
+    stack.addNode(vertex);
+    while(stack.getTopElement() >= 0){
+        int currentVertex = stack.deleteNode();
         if(!isVisited[currentVertex-1]){
             isVisited[currentVertex-1] = 1;
             for(int i=0; i<this->degrees[currentVertex-1]; i++){
                 int adjacentVertex = this->adjacencyList[currentVertex-1].getElement(i);
                 if(!isVisited[adjacentVertex-1])
-                    stack->addNode(adjacentVertex);
+                    stack.addNode(adjacentVertex);
             }
         }
     }
-
-    delete stack;
 }
 
 int Graph::countComponents(){
@@ -81,29 +78,26 @@ int Graph::countComponents(){
 }
 
 int Graph::isComponentBipartite(int vertex, int *isVisited, int *flags) {
-    //MyList* stack = new MyList();
-    MyStack* stack = new MyStack();
-    stack->addNode(vertex);
+    MyStack stack;
+    stack.addNode(vertex);
     flags[vertex-1] = LEFT;
-    while(stack->getTopElement() >= 0){
-        int currentVertex = stack->deleteNode();
+    while(stack.getTopElement() >= 0){
+        int currentVertex = stack.deleteNode();
         if(!isVisited[currentVertex-1]) {
             isVisited[currentVertex-1] = 1;
             for (int i = 0; i < this->degrees[currentVertex-1]; i++) {
                 int adjacentVertex = this->adjacencyList[currentVertex-1].getElement(i);
                 if (flags[adjacentVertex-1] == UNSORTED && !isVisited[adjacentVertex-1]) {
                     flags[adjacentVertex-1] = (flags[currentVertex-1] == LEFT) ? RIGHT : LEFT;
-                    stack->addNode(adjacentVertex);
+                    stack.addNode(adjacentVertex);
                 }
                 else if (flags[adjacentVertex-1] == flags[currentVertex-1]) {
-                    delete stack;
+
                     return 0;
                 }
             }
         }
     }
-
-    delete stack;
 
     return 1;
 }
@@ -127,6 +121,44 @@ int Graph::isBipartite() {
     delete[] isVisited;
 
     return isBipartite;
+}
+
+void Graph::greedyColoring() {
+    int* isColorAvailable = new int[this->size];
+    int* colors = new int[this->size];
+    for(int i=0; i<this->size; i++){
+        isColorAvailable[i] = 1;
+        colors[i] = UNCOLORED;
+    }
+    colors[0] = 1;
+    for(int i=1; i<this->size; i++){
+        for(int j=0; j<this->degrees[i]; j++){
+            int adjacentVertex = this->adjacencyList[i].getElement(j);
+            if(colors[adjacentVertex-1] != UNCOLORED)
+                isColorAvailable[colors[adjacentVertex-1]] = 0;
+        }
+        for(int j=1; j<this->size; j++){
+            if(isColorAvailable[j]){
+                colors[i] = j;
+                break;
+            }
+        }
+        for(int j=0; j<this->degrees[i]; j++){
+            int adjacentVertex = this->adjacencyList[i].getElement(j);
+            if(colors[adjacentVertex-1] != UNCOLORED)
+                isColorAvailable[colors[adjacentVertex-1]] = 1;
+        }
+    }
+    for(int i=0; i<this->size; i++)
+        printf("%d ", colors[i]);
+    printf("\n");
+
+    delete[] colors;
+    delete[] isColorAvailable;
+}
+
+void Graph::LFColoring() {
+    // TODO
 }
 
 int Graph::countC4() {

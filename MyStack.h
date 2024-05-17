@@ -18,7 +18,7 @@ public:
     ~MyStack();
 
 private:
-    MyVector* stack;
+    MyVector stack;
     int top;
 
 };

@@ -2,6 +2,7 @@
 #define GRAPH_H
 
 #include <stdio.h>
+#include <algorithm>
 
 #include "MyVector.h"
 #include "MyList.h"
@@ -11,6 +12,7 @@
 #define LEFT 0
 #define RIGHT 1
 #define UNSORTED -1
+#define UNCOLORED 0
 
 class Graph {
 public:
@@ -30,7 +32,8 @@ private:
     int countComponents();
     int isComponentBipartite(int vertex, int* isVisited, int* flags);
     int isBipartite();
-
+    void greedyColoring();
+    void LFColoring();
     int countC4();
     int complementEdges();
 
