@@ -4,25 +4,19 @@ MyStack::MyStack() {
     this->top = -1;
 }
 
-void MyStack::addNode(int element) {
+void MyStack::push(int element) {
     this->top++;
-    this->stack.insertElement(element, this->top);
+    insertElement(element, this->top);
 }
 
-int MyStack::deleteNode() {
-    int val = this->stack.getElement(this->top);
+int MyStack::pop() {
+    int val = getElement(this->top);
     this->top--;
     return val;
 }
 
-int MyStack::getTopIndex() const {
-    return this->top;
+int MyStack::isEmpty() const {
+    return this->top==-1;
 }
 
-int MyStack::getSize() const {
-    return this->stack.getSize();
-}
-
-MyStack::~MyStack() {
-
-}
+MyStack::~MyStack() = default;

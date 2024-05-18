@@ -20,8 +20,8 @@ void Graph::printProperties() {
     (isBipartite()) ? printf("T\n") : printf("F\n");
     printf("?\n");
     printf("?\n");
-    greedyColoring();
-    LFColoring();
+    coloring(GREEDY);
+    coloring(LF);
     printf("?\n");
     printf("?\n");
     printf("%d\n", complementEdges());
@@ -46,15 +46,15 @@ void Graph::degreeSequence(){
 
 void Graph::dfs(int vertex, int* isVisited){
     MyStack stack;
-    stack.addNode(vertex);
-    while(stack.getTopIndex() >= 0){
-        int currentVertex = stack.deleteNode();
+    stack.push(vertex);
+    while(!stack.isEmpty()){
+        int currentVertex = stack.pop();
         if(!isVisited[currentVertex-1]){
             isVisited[currentVertex-1] = 1;
-            for(int i=0; i<this->degrees[currentVertex-1]; i++){
+            for(int i=0; i<this->adjacencyList[currentVertex-1].getSize(); i++){
                 int adjacentVertex = this->adjacencyList[currentVertex-1].getElement(i);
                 if(!isVisited[adjacentVertex-1])
-                    stack.addNode(adjacentVertex);
+                    stack.push(adjacentVertex);
             }
         }
     }
@@ -71,7 +71,6 @@ int Graph::countComponents(){
             count++;
         }
     }
-
     delete[] isVisited;
 
     return count;
@@ -79,26 +78,23 @@ int Graph::countComponents(){
 
 int Graph::isComponentBipartite(int vertex, int *isVisited, int *flags) {
     MyStack stack;
-    stack.addNode(vertex);
+    stack.push(vertex);
     flags[vertex-1] = LEFT;
-    while(stack.getTopIndex() >= 0){
-        int currentVertex = stack.deleteNode();
+    while(!stack.isEmpty()){
+        int currentVertex = stack.pop();
         if(!isVisited[currentVertex-1]) {
             isVisited[currentVertex-1] = 1;
-            for (int i = 0; i < this->degrees[currentVertex-1]; i++) {
+            for (int i=0; i<this->adjacencyList[currentVertex-1].getSize(); i++) {
                 int adjacentVertex = this->adjacencyList[currentVertex-1].getElement(i);
                 if (flags[adjacentVertex-1] == UNSORTED && !isVisited[adjacentVertex-1]) {
                     flags[adjacentVertex-1] = (flags[currentVertex-1] == LEFT) ? RIGHT : LEFT;
-                    stack.addNode(adjacentVertex);
+                    stack.push(adjacentVertex);
                 }
-                else if (flags[adjacentVertex-1] == flags[currentVertex-1]) {
-
+                else if (flags[adjacentVertex-1] == flags[currentVertex-1])
                     return 0;
-                }
             }
         }
     }
-
     return 1;
 }
 
@@ -123,55 +119,15 @@ int Graph::isBipartite() {
     return isBipartite;
 }
 
-void Graph::greedyColoring() {
-    int* isColorAvailable = new int[this->size];
-    int* colors = new int[this->size];
-    for(int i=0; i<this->size; i++){
-        isColorAvailable[i] = 1;
-        colors[i] = UNCOLORED;
-    }
-    colors[0] = 1;
-    for(int i=1; i<this->size; i++){
-        for(int j=0; j<this->degrees[i]; j++){
-            int adjacentVertex = this->adjacencyList[i].getElement(j);
-            if(colors[adjacentVertex-1] != UNCOLORED)
-                isColorAvailable[colors[adjacentVertex-1]] = 0;
-        }
-        for(int j=1; j<this->size; j++){
-            if(isColorAvailable[j]){
-                colors[i] = j;
-                break;
-            }
-        }
-        for(int j=0; j<this->degrees[i]; j++){
-            int adjacentVertex = this->adjacencyList[i].getElement(j);
-            if(colors[adjacentVertex-1] != UNCOLORED)
-                isColorAvailable[colors[adjacentVertex-1]] = 1;
-        }
-    }
-    for(int i=0; i<this->size; i++)
-        printf("%d ", colors[i]);
-    printf("\n");
-
-    delete[] colors;
-    delete[] isColorAvailable;
-}
-
-void Graph::LFColoring() {
+void Graph::coloring(int type) {
     int* order = new int[this->size];
     for(int i=0; i<this->size; i++)
         order[i] = i;
-    twoArraysMergeSort(this->degrees, order, 0, this->size-1);
-/*
-    for(int i=0; i<this->size; i++) {
-        printf("%d ", order[i]);
-        printf("%d ", this->degrees[i]);
-        printf("%d\n", this->degrees[order[i]]);
-    } */
+    if(type == LF)
+        twoArraysMergeSort(this->degrees, order, 0, this->size-1);
 
     int* isColorAvailable = new int[this->size];
     int* colors = new int[this->size];
-
     for(int i=0; i<this->size; i++){
         isColorAvailable[i] = 1;
         colors[i] = UNCOLORED;
@@ -179,7 +135,7 @@ void Graph::LFColoring() {
     colors[order[0]] = 1;
     for(int i=1; i<this->size; i++){
         int currentIndex = order[i];
-        for(int j=0; j<this->degrees[currentIndex]; j++){
+        for(int j=0; j<this->adjacencyList[currentIndex].getSize(); j++){
             int adjacentVertex = this->adjacencyList[currentIndex].getElement(j);
             if(colors[adjacentVertex-1] != UNCOLORED)
                 isColorAvailable[colors[adjacentVertex-1]] = 0;
@@ -190,7 +146,7 @@ void Graph::LFColoring() {
                 break;
             }
         }
-        for(int j=0; j<this->degrees[currentIndex]; j++){
+        for(int j=0; j<this->adjacencyList[currentIndex].getSize(); j++){
             int adjacentVertex = this->adjacencyList[currentIndex].getElement(j);
             if(colors[adjacentVertex-1] != UNCOLORED)
                 isColorAvailable[colors[adjacentVertex-1]] = 1;
@@ -205,6 +161,7 @@ void Graph::LFColoring() {
     delete[] order;
 }
 
+
 /*
 int Graph::countC4() {
     int count = 0;
@@ -217,7 +174,7 @@ int Graph::countC4() {
         while (stack->getTopElement() != nullptr) {
             int parentVertex = stack->getTopElement()->getPrevious();
             int currentVertex = stack->deleteNode();
-            int currentDepth = depthStack->deleteNode();
+            int currentDepth = depthStack->pop();
             if(currentVertex==i+1 && currentDepth==maxDepth)
                 count++;
             else if(currentDepth<maxDepth){
@@ -226,7 +183,7 @@ int Graph::countC4() {
                     if(adjacentVertex!=parentVertex){
                         stack->addNode(adjacentVertex);
                         stack->getTopElement()->setPrevious(currentVertex);
-                        depthStack->addNode(currentDepth+1);
+                        depthStack->push(currentDepth+1);
                     }
                 }
             }

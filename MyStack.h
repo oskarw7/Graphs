@@ -1,24 +1,20 @@
-#ifndef STACK_H
-#define STACK_H
+#ifndef MYSTACK_H
+#define MYSTACK_H
 
 #include "MyVector.h"
 
-class MyStack {
+class MyStack : public MyVector {
 public:
     MyStack();
 
-    void addNode(int element);
+    void push(int element);
 
-    int deleteNode();
+    int pop();
 
-    int getTopIndex() const;
-
-    int getSize() const;
+    int isEmpty() const;
 
     ~MyStack();
-
 private:
-    MyVector stack;
     int top;
 
 };

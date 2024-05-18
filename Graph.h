@@ -12,6 +12,8 @@
 #define RIGHT 1
 #define UNSORTED -1
 #define UNCOLORED 0
+#define GREEDY 0
+#define LF 1
 
 class Graph {
 public:
@@ -31,8 +33,7 @@ private:
     int countComponents();
     int isComponentBipartite(int vertex, int* isVisited, int* flags);
     int isBipartite();
-    void greedyColoring();
-    void LFColoring();
+    void coloring(int type);
     //int countC4();
     int complementEdges() const;
 

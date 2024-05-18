@@ -17,6 +17,8 @@ public:
     ~MyVector();
 
 private:
+    void reallocate();
+
     int* vector;
     int size;
     int capacity;
