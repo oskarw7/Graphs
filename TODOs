@@ -1,0 +1,3 @@
+Znaczący wzrost zużywanej pamięci dla sprawdzania liczby składowych spójności (z 9k na 19k w 7. teście).
+Sprawdziłem, czy to kwestia zasięgu zmiennych.
+Po zamianie MyStack na std::stack spadek o 5k.
