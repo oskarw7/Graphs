@@ -6,6 +6,8 @@ class MyVector {
 public:
     MyVector();
 
+    void initCapacity(int n);
+
     void addElement(int element);
 
     void insertElement(int element, int index);

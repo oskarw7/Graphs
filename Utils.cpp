@@ -1,15 +1,8 @@
 #include "Utils.h"
 
-void merge(int* arr, int left, int middle, int leftSize, int rightSize){
-    int* leftArray = new int[leftSize];
-    int* rightArray = new int[rightSize];
+void compare(int* arr, const int* leftArray, const int* rightArray, int low, int leftSize, int rightSize){
+    int i = 0, j = 0, k = low;
 
-    for(int i=0; i<leftSize; i++)
-        leftArray[i] = arr[left+i];
-    for(int i=0; i<rightSize; i++)
-        rightArray[i] = arr[middle+1+i];
-
-    int i = 0, j = 0, k = left;
     while(i<leftSize && j<rightSize){
         if(leftArray[i] >= rightArray[j])
             arr[k] = leftArray[i++];
@@ -22,32 +15,11 @@ void merge(int* arr, int left, int middle, int leftSize, int rightSize){
         arr[k++] = leftArray[i++];
     while(j<rightSize)
         arr[k++] = rightArray[j++];
-
-    delete[] rightArray;
-    delete[] leftArray;
 }
 
-void mergeSort(int* arr, int low, int high){
-    if(low>=high)
-        return;
-    else {
-        int middle = (low+high)/2;
-        mergeSort(arr, low, middle);
-        mergeSort(arr, middle+1, high);
-        merge(arr, low, middle, middle-low+1, high-middle);
-    }
-}
-
-void twoArraysMerge(int* comparator, int* arr, int low, int middle, int leftSize, int rightSize){
-    int* leftArray = new int[leftSize];
-    int* rightArray = new int[rightSize];
-
-    for(int i=0; i<leftSize; i++)
-        leftArray[i] = arr[low+i];
-    for(int i=0; i<rightSize; i++)
-        rightArray[i] = arr[middle+1+i];
-
+void stableCompare(const int* comparator, int* arr, const int* leftArray, const int* rightArray, int low, int leftSize, int rightSize){
     int i = 0, j = 0, k = low;
+
     while(i<leftSize && j<rightSize){
         if(comparator[leftArray[i]] > comparator[rightArray[j]] || (comparator[leftArray[i]] == comparator[rightArray[j]] && leftArray[i] < rightArray[j]))
             arr[k] = leftArray[i++];
@@ -60,18 +32,33 @@ void twoArraysMerge(int* comparator, int* arr, int low, int middle, int leftSize
         arr[k++] = leftArray[i++];
     while(j<rightSize)
         arr[k++] = rightArray[j++];
+}
+
+void merge(const int* comparator, int* arr, int low, int middle, int leftSize, int rightSize){
+    int* leftArray = new int[leftSize];
+    int* rightArray = new int[rightSize];
+
+    for(int i=0; i<leftSize; i++)
+        leftArray[i] = arr[low+i];
+    for(int i=0; i<rightSize; i++)
+        rightArray[i] = arr[middle+1+i];
+
+    if(comparator==nullptr)
+        compare(arr, leftArray, rightArray, low, leftSize, rightSize);
+    else
+        stableCompare(comparator, arr, leftArray, rightArray, low, leftSize, rightSize);
 
     delete[] rightArray;
     delete[] leftArray;
 }
 
-void twoArraysMergeSort(int* comparator, int* arr, int low, int high){
+void mergeSort(const int* comparator, int* arr, int low, int high){
     if(low>=high)
         return;
     else {
         int middle = (low+high)/2;
-        twoArraysMergeSort(comparator, arr, low, middle);
-        twoArraysMergeSort(comparator, arr, middle+1, high);
-        twoArraysMerge(comparator, arr, low, middle, middle-low+1, high-middle);
+        mergeSort(comparator, arr, low, middle);
+        mergeSort(comparator, arr, middle + 1, high);
+        merge(comparator, arr, low, middle, middle - low + 1, high - middle);
     }
 }

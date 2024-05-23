@@ -12,6 +12,8 @@ void Graph::addEdge(int source, int destination){
 
 void Graph::setDegree(int vertex, int degree){
     this->degrees[vertex] = degree;
+    if(degree > 1)
+        this->adjacencyList[vertex].initCapacity(degree);
 }
 
 void Graph::printProperties() {
@@ -24,7 +26,7 @@ void Graph::printProperties() {
     coloring(LF);
     printf("?\n");
     printf("?\n");
-    printf("%d\n", complementEdges());
+    printf("%lld\n", complementEdges());
 }
 
 Graph::~Graph(){
@@ -36,7 +38,7 @@ void Graph::degreeSequence(){
     int* copy = new int[this->size];
     for(int i=0; i<this->size; i++)
         copy[i] = this->degrees[i];
-    mergeSort(copy, 0, this->size-1);
+    mergeSort(nullptr, copy, 0, this->size - 1);
     for(int i=0; i<this->size; i++)
         printf("%d ", copy[i]);
     printf("\n");
@@ -44,13 +46,13 @@ void Graph::degreeSequence(){
     delete[] copy;
 }
 
-void Graph::dfs(int vertex, int* isVisited){
+void Graph::dfs(int vertex, bool* isVisited){
     MyStack stack;
     stack.push(vertex);
     while(!stack.isEmpty()){
         int currentVertex = stack.pop();
         if(!isVisited[currentVertex-1]){
-            isVisited[currentVertex-1] = 1;
+            isVisited[currentVertex-1] = true;
             for(int i=0; i<this->adjacencyList[currentVertex-1].getSize(); i++){
                 int adjacentVertex = this->adjacencyList[currentVertex-1].getElement(i);
                 if(!isVisited[adjacentVertex-1])
@@ -62,9 +64,9 @@ void Graph::dfs(int vertex, int* isVisited){
 
 int Graph::countComponents(){
     int count = 0;
-    int* isVisited = new int[this->size];
+    bool* isVisited = new bool[this->size];
     for(int i=0; i<this->size; i++)
-        isVisited[i] = 0;
+        isVisited[i] = false;
     for(int i=0; i<this->size; i++){
         if(!isVisited[i]){
             dfs(i+1, isVisited);
@@ -76,14 +78,14 @@ int Graph::countComponents(){
     return count;
 }
 
-int Graph::isComponentBipartite(int vertex, int *isVisited, int *flags) {
+int Graph::isComponentBipartite(int vertex, bool *isVisited, short int *flags) {
     MyStack stack;
     stack.push(vertex);
     flags[vertex-1] = LEFT;
     while(!stack.isEmpty()){
         int currentVertex = stack.pop();
         if(!isVisited[currentVertex-1]) {
-            isVisited[currentVertex-1] = 1;
+            isVisited[currentVertex-1] = true;
             for (int i=0; i<this->adjacencyList[currentVertex-1].getSize(); i++) {
                 int adjacentVertex = this->adjacencyList[currentVertex-1].getElement(i);
                 if (flags[adjacentVertex-1] == UNSORTED && !isVisited[adjacentVertex-1]) {
@@ -100,10 +102,10 @@ int Graph::isComponentBipartite(int vertex, int *isVisited, int *flags) {
 
 int Graph::isBipartite() {
     int isBipartite = 1;
-    int* isVisited = new int[this->size];
-    int* flags = new int[this->size];
+    bool* isVisited = new bool[this->size];
+    short int* flags = new short int[this->size];
     for(int i=0; i<this->size; i++){
-        isVisited[i] = 0;
+        isVisited[i] = false;
         flags[i] = UNSORTED;
     }
     for(int i=0; i<this->size; i++){
@@ -119,17 +121,17 @@ int Graph::isBipartite() {
     return isBipartite;
 }
 
-void Graph::coloring(int type) {
+void Graph::coloring(short int type) {
     int* order = new int[this->size];
     for(int i=0; i<this->size; i++)
         order[i] = i;
     if(type == LF)
-        twoArraysMergeSort(this->degrees, order, 0, this->size-1);
+        mergeSort(this->degrees, order, 0, this->size - 1);
 
-    int* isColorAvailable = new int[this->size];
+    bool* isColorAvailable = new bool[this->size];
     int* colors = new int[this->size];
     for(int i=0; i<this->size; i++){
-        isColorAvailable[i] = 1;
+        isColorAvailable[i] = true;
         colors[i] = UNCOLORED;
     }
     colors[order[0]] = 1;
@@ -138,7 +140,7 @@ void Graph::coloring(int type) {
         for(int j=0; j<this->adjacencyList[currentIndex].getSize(); j++){
             int adjacentVertex = this->adjacencyList[currentIndex].getElement(j);
             if(colors[adjacentVertex-1] != UNCOLORED)
-                isColorAvailable[colors[adjacentVertex-1]] = 0;
+                isColorAvailable[colors[adjacentVertex-1]] = false;
         }
         for(int j=1; j<this->size; j++){
             if(isColorAvailable[j]){
@@ -149,7 +151,7 @@ void Graph::coloring(int type) {
         for(int j=0; j<this->adjacencyList[currentIndex].getSize(); j++){
             int adjacentVertex = this->adjacencyList[currentIndex].getElement(j);
             if(colors[adjacentVertex-1] != UNCOLORED)
-                isColorAvailable[colors[adjacentVertex-1]] = 1;
+                isColorAvailable[colors[adjacentVertex-1]] = true;
         }
     }
     for(int i=0; i<this->size; i++)
@@ -196,11 +198,12 @@ int Graph::countC4() {
 }
 */
 
-int Graph::complementEdges() const{
-    int completeEdges = (this->size)*(this->size-1)/2;
-    int currentEdges = 0;
+long long Graph::complementEdges() const{
+    long long s = this->size;
+    long long completeEdges = (s)*(s-1)/2;
+    long long currentEdges = 0;
     for(int i=0; i<this->size; i++)
-        currentEdges += this->degrees[i];
+        currentEdges += (long long)this->degrees[i];
     currentEdges /= 2;
 
     return completeEdges-currentEdges;

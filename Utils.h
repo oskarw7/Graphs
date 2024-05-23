@@ -1,13 +1,13 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-void merge(int* arr, int left, int middle, int leftSize, int rightSize);
+void compare(int* arr, const int* leftArray, const int* rightArray, int low, int leftSize, int rightSize);
 
-void mergeSort(int* arr, int low, int high);
+void stableCompare(const int* comparator, int* arr, const int* leftArray, const int* rightArray, int low, int leftSize, int rightSize);
 
-void twoArraysMerge(int* comparator, int* arr, int low, int middle, int leftSize, int rightSize);
+void merge(const int* comparator, int* arr, int low, int middle, int leftSize, int rightSize);
 
-void twoArraysMergeSort(int* comparator, int* arr, int low, int high);
+void mergeSort(const int* comparator, int* arr, int low, int high);
 
 
 #endif

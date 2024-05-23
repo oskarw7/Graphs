@@ -6,6 +6,12 @@ MyVector::MyVector(){
     this->vector = new int[this->capacity];
 }
 
+void MyVector::initCapacity(int n){
+    this->capacity = n;
+    delete[] this->vector;
+    this->vector = new int[this->capacity];
+}
+
 void MyVector::addElement(int element){
     if(this->size == this->capacity)
         reallocate();

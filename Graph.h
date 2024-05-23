@@ -29,13 +29,13 @@ public:
 
 private:
     void degreeSequence();
-    void dfs(int vertex, int* isVisited);
+    void dfs(int vertex, bool* isVisited);
     int countComponents();
-    int isComponentBipartite(int vertex, int* isVisited, int* flags);
+    int isComponentBipartite(int vertex, bool* isVisited, short int* flags);
     int isBipartite();
-    void coloring(int type);
+    void coloring(short int type);
     //int countC4();
-    int complementEdges() const;
+    long long complementEdges() const;
 
     MyVector* adjacencyList;
     int* degrees;
