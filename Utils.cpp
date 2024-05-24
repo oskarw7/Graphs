@@ -1,5 +1,6 @@
 #include "Utils.h"
 
+// compare left and right array, merge them into arr
 void compare(int* arr, const int* leftArray, const int* rightArray, int low, int leftSize, int rightSize){
     int i = 0, j = 0, k = low;
 
@@ -17,6 +18,7 @@ void compare(int* arr, const int* leftArray, const int* rightArray, int low, int
         arr[k++] = rightArray[j++];
 }
 
+// compare left and right array using comparator array, merge them into arr
 void stableCompare(const int* comparator, int* arr, const int* leftArray, const int* rightArray, int low, int leftSize, int rightSize){
     int i = 0, j = 0, k = low;
 
@@ -34,6 +36,7 @@ void stableCompare(const int* comparator, int* arr, const int* leftArray, const 
         arr[k++] = rightArray[j++];
 }
 
+// merge left and right array into arr
 void merge(const int* comparator, int* arr, int low, int middle, int leftSize, int rightSize){
     int* leftArray = new int[leftSize];
     int* rightArray = new int[rightSize];
@@ -52,6 +55,7 @@ void merge(const int* comparator, int* arr, int low, int middle, int leftSize, i
     delete[] leftArray;
 }
 
+// sort arr using comparator array, divide into two parts
 void mergeSort(const int* comparator, int* arr, int low, int high){
     if(low>=high)
         return;

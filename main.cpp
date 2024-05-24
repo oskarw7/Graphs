@@ -2,6 +2,8 @@
 
 #include "Graph.h"
 
+// main function, reads the input and creates Graph objects
+// calls the printProperties function for each graph
 int main() {
     int graphCount, graphSize, listSize, vertex;
 
