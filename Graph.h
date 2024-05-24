@@ -5,6 +5,7 @@
 
 #include "MyVector.h"
 #include "MyStack.h"
+#include "MyQueue.h"
 #include "Utils.h"
 //#include "MyList.h"
 
@@ -33,12 +34,15 @@ private:
     int countComponents();
     int isComponentBipartite(int vertex, bool* isVisited, short int* flags);
     int isBipartite();
+    int bfs(int vertex, int componentSize, int* distances);
+    void eccentricity();
     void coloring(short int type);
     //int countC4();
     long long complementEdges() const;
 
     MyVector* adjacencyList;
     int* degrees;
+    int* components;
     int size;
 };
 

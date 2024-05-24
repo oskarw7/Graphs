@@ -16,4 +16,6 @@ add_executable(Graphs main.cpp
         MyVector.h
         MyStack.cpp
         MyStack.h
+        MyQueue.cpp
+        MyQueue.h
 )

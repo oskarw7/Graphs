@@ -15,7 +15,7 @@ int MyStack::pop() {
     return val;
 }
 
-int MyStack::isEmpty() const {
+bool MyStack::isEmpty() const {
     return this->top==-1;
 }
 

@@ -11,7 +11,7 @@ public:
 
     int pop();
 
-    int isEmpty() const;
+    bool isEmpty() const;
 
     ~MyStack();
 private:

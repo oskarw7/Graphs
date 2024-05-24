@@ -4,6 +4,7 @@ Graph::Graph(int size){
     this->size = size;
     this->adjacencyList = new MyVector[size];
     this->degrees = new int[size];
+    this->components = new int[size];
 }
 
 void Graph::addEdge(int source, int destination){
@@ -20,7 +21,7 @@ void Graph::printProperties() {
     degreeSequence();
     printf("%d\n", countComponents());
     (isBipartite()) ? printf("T\n") : printf("F\n");
-    printf("?\n");
+    eccentricity();
     printf("?\n");
     coloring(GREEDY);
     coloring(LF);
@@ -32,6 +33,7 @@ void Graph::printProperties() {
 Graph::~Graph(){
     delete[] this->degrees;
     delete[] this->adjacencyList;
+    delete[] this->components;
 }
 
 void Graph::degreeSequence(){
@@ -47,19 +49,26 @@ void Graph::degreeSequence(){
 }
 
 void Graph::dfs(int vertex, bool* isVisited){
+    MyVector visited;
     MyStack stack;
+    int componentSize = 0;
     stack.push(vertex);
     while(!stack.isEmpty()){
         int currentVertex = stack.pop();
+        visited.addElement(currentVertex);
         if(!isVisited[currentVertex-1]){
             isVisited[currentVertex-1] = true;
+            componentSize++;
             for(int i=0; i<this->adjacencyList[currentVertex-1].getSize(); i++){
                 int adjacentVertex = this->adjacencyList[currentVertex-1].getElement(i);
-                if(!isVisited[adjacentVertex-1])
+                if(!isVisited[adjacentVertex-1]) {
                     stack.push(adjacentVertex);
+                }
             }
         }
     }
+    for(int i=0; i<visited.getSize(); i++)
+        this->components[visited.getElement(i)-1] = componentSize;
 }
 
 int Graph::countComponents(){
@@ -119,6 +128,51 @@ int Graph::isBipartite() {
     delete[] isVisited;
 
     return isBipartite;
+}
+
+int Graph::bfs(int vertex, int componentSize, int* distances){
+    MyQueue queue(componentSize);
+    int countComponents = 1, maxDistance = 0, j = 0;
+    int* visited = new int[componentSize];
+    queue.push(vertex);
+    distances[vertex-1] = 0;
+    visited[j++] = vertex;
+    while(!queue.isEmpty() && countComponents < componentSize){
+        int currentVertex = queue.pop();
+        for(int i=0; i<this->adjacencyList[currentVertex-1].getSize(); i++){
+            int adjacentVertex = this->adjacencyList[currentVertex-1].getElement(i);
+            if(distances[adjacentVertex-1] == -1){
+                distances[adjacentVertex-1] = distances[currentVertex-1] + 1;
+                if(distances[adjacentVertex-1] > maxDistance)
+                    maxDistance = distances[adjacentVertex-1];
+                queue.push(adjacentVertex);
+                visited[j++] = adjacentVertex;
+                countComponents++;
+                if(countComponents == componentSize)
+                    break;
+            }
+        }
+    }
+    for(int i=0; i<j; i++)
+        distances[visited[i]-1] = -1;
+
+    delete[] visited;
+
+    return maxDistance;
+}
+
+void Graph::eccentricity(){
+    int* distances = new int[this->size];
+    for(int i=0; i<this->size; i++)
+        distances[i] = -1;
+
+    for(int i=0; i<this->size; i++){
+        int maxDistance = bfs(i+1, this->components[i], distances);
+        printf("%d ", maxDistance);
+    }
+    printf("\n");
+
+    delete[] distances;
 }
 
 void Graph::coloring(short int type) {

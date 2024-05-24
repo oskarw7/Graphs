@@ -91,6 +91,12 @@ build CMakeFiles/Graphs.dir/MyStack.cpp.o: CXX_COMPILER__Graphs_unscanned_Debug 
   OBJECT_DIR = CMakeFiles/Graphs.dir
   OBJECT_FILE_DIR = CMakeFiles/Graphs.dir
 
+build CMakeFiles/Graphs.dir/MyQueue.cpp.o: CXX_COMPILER__Graphs_unscanned_Debug /Users/oskarwisniewski/Desktop/Studia/PG$ kod/Algorytmy$ i$ struktury$ danych/Graphs/MyQueue.cpp || cmake_object_order_depends_target_Graphs
+  DEP_FILE = CMakeFiles/Graphs.dir/MyQueue.cpp.o.d
+  FLAGS = -g -std=gnu++17 -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk -fcolor-diagnostics
+  OBJECT_DIR = CMakeFiles/Graphs.dir
+  OBJECT_FILE_DIR = CMakeFiles/Graphs.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Graphs
@@ -99,7 +105,7 @@ build CMakeFiles/Graphs.dir/MyStack.cpp.o: CXX_COMPILER__Graphs_unscanned_Debug 
 #############################################
 # Link the executable Graphs
 
-build Graphs: CXX_EXECUTABLE_LINKER__Graphs_Debug CMakeFiles/Graphs.dir/main.cpp.o CMakeFiles/Graphs.dir/MyList.cpp.o CMakeFiles/Graphs.dir/Node.cpp.o CMakeFiles/Graphs.dir/Graph.cpp.o CMakeFiles/Graphs.dir/Utils.cpp.o CMakeFiles/Graphs.dir/MyVector.cpp.o CMakeFiles/Graphs.dir/MyStack.cpp.o
+build Graphs: CXX_EXECUTABLE_LINKER__Graphs_Debug CMakeFiles/Graphs.dir/main.cpp.o CMakeFiles/Graphs.dir/MyList.cpp.o CMakeFiles/Graphs.dir/Node.cpp.o CMakeFiles/Graphs.dir/Graph.cpp.o CMakeFiles/Graphs.dir/Utils.cpp.o CMakeFiles/Graphs.dir/MyVector.cpp.o CMakeFiles/Graphs.dir/MyStack.cpp.o CMakeFiles/Graphs.dir/MyQueue.cpp.o
   FLAGS = -g -arch arm64 -isysroot /Library/Developer/CommandLineTools/SDKs/MacOSX14.0.sdk
   OBJECT_DIR = CMakeFiles/Graphs.dir
   POST_BUILD = :
