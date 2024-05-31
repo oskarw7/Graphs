@@ -69,9 +69,8 @@ void Graph::dfs(int vertex, bool* isVisited){
             componentSize++;
             for(int i=0; i<this->adjacencyList[currentVertex-1].getSize(); i++){
                 int adjacentVertex = this->adjacencyList[currentVertex-1].getElement(i);
-                if(!isVisited[adjacentVertex-1]) {
+                if(!isVisited[adjacentVertex-1])
                     stack.push(adjacentVertex);
-                }
             }
         }
     }
@@ -197,6 +196,7 @@ void Graph::eccentricity(){
 
 // coloring of vertices: greedy or largest-first (LF)
 // degrees array is passed to mergeSort to make sorting stable (only for LF)
+// order array is used to store indexes of vertices in sorted order (0 to size-1 by default)
 void Graph::coloring(short int type) {
     int* order = new int[this->size];
     for(int i=0; i<this->size; i++)
@@ -250,39 +250,3 @@ long long Graph::complementEdges() const{
 
     return completeEdges-currentEdges;
 }
-
-
-// count C4 - works fine, but it's too slow
-/*
-int Graph::countC4() {
-    int count = 0;
-    const int maxDepth = 4;
-    MyList* stack = new MyList();
-    MyList* depthStack = new MyList();
-    for (int i=0; i<this->size; i++) {
-        stack->addNode(i+1);
-        depthStack->addNode(0);
-        while (stack->getTopElement() != nullptr) {
-            int parentVertex = stack->getTopElement()->getPrevious();
-            int currentVertex = stack->deleteNode();
-            int currentDepth = depthStack->pop();
-            if(currentVertex==i+1 && currentDepth==maxDepth)
-                count++;
-            else if(currentDepth<maxDepth){
-                for(int j=0; j<this->degrees[currentVertex-1]; j++){
-                    int adjacentVertex = this->adjacencyList[currentVertex-1].getElement(j);
-                    if(adjacentVertex!=parentVertex){
-                        stack->addNode(adjacentVertex);
-                        stack->getTopElement()->setPrevious(currentVertex);
-                        depthStack->push(currentDepth+1);
-                    }
-                }
-            }
-        }
-    }
-    delete depthStack;
-    delete stack;
-
-    return count/8;
-}
-*/

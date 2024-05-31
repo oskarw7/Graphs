@@ -13,8 +13,8 @@
 // greedy and lf are flags used for coloring
 #define LEFT 0
 #define RIGHT 1
-#define UNSORTED -1
-#define UNSINGED -1
+#define UNSORTED (-1)
+#define UNSINGED (-1)
 #define UNCOLORED 0
 #define GREEDY 0
 #define LF 1

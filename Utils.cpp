@@ -12,10 +12,10 @@ void compare(int* arr, const int* leftArray, const int* rightArray, int low, int
         k++;
     }
 
-    while(i<leftSize)
-        arr[k++] = leftArray[i++];
-    while(j<rightSize)
-        arr[k++] = rightArray[j++];
+    for(int l=i; l<leftSize; l++)
+        arr[k++] = leftArray[l];
+    for(int l=j; l<rightSize; l++)
+        arr[k++] = rightArray[l];
 }
 
 // compare left and right array using comparator array, merge them into arr
@@ -30,10 +30,10 @@ void stableCompare(const int* comparator, int* arr, const int* leftArray, const 
         k++;
     }
 
-    while(i<leftSize)
-        arr[k++] = leftArray[i++];
-    while(j<rightSize)
-        arr[k++] = rightArray[j++];
+    for(int l=i; l<leftSize; l++)
+        arr[k++] = leftArray[l];
+    for(int l=j; l<rightSize; l++)
+        arr[k++] = rightArray[l];
 }
 
 // merge left and right array into arr
