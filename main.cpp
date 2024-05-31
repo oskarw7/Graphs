@@ -24,3 +24,7 @@ int main() {
 
     return 0;
 }
+
+// Sources:
+// Introduction to Algorithms, Fourth Edition, T. Cormen, Ch. Leiserson, R. Rivest, C. Stein (e.g. 2.3.1 Divide-and-Conquer)
+// Lecture by dr eng. K. Manuszewski (e.g. DFS, BFS)
